@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
-import { FILTERS_BUTTONS, NOTE_FILTERS } from '../constants'
+import { FILTERS_BUTTONS } from '../constants'
 import { type FilterValue } from '../types'
+import { useTabAnimation } from '../hooks/useTabAnimation'
 
 interface Props {
   filterSelected: FilterValue
@@ -8,50 +8,29 @@ interface Props {
 }
 
 const Filter = ({ filterSelected, onFilterChange }: Props) => {
-  const tabRefs = useRef<(HTMLAnchorElement | null)[]>([])
-  const [selectedTabIndex, setSelectedTabIndex] = useState<number>(() => {
-    const selectedIndex = Object.entries(NOTE_FILTERS).findIndex(
-      ([, value]) => value === filterSelected
-    )
-
-    return selectedIndex === -1 ? 0 : selectedIndex
-  })
-  const [tabWidth, setTabWidth] = useState(0)
-  const [tabOffsetLeft, setTabOffsetLeft] = useState(0)
-
-  console.log(tabRefs)
-
-  useEffect(() => {
-    const setTabPosition = () => {
-      const currentTab = tabRefs.current[selectedTabIndex] as HTMLAnchorElement
-
-      setTabOffsetLeft(currentTab.offsetLeft)
-      setTabWidth(currentTab.clientWidth)
-    }
-
-    setTabPosition()
-  }, [selectedTabIndex])
+  const { tabRefs, tabWidth, tabOffsetLeft, setSelectedTabIndex } =
+    useTabAnimation(filterSelected)
 
   return (
-    <div className='relative'>
+    <div className='relative flex items-center'>
       <span
-        className='absolute flex py-2'
+        className='absolute py-2 h-full bg-white/10 rounded-3xl transition-all duration-200'
         style={{ width: tabWidth, left: tabOffsetLeft }}
       ></span>
-      <ul className='flex gap-4'>
+      <ul className='flex space-x-1'>
         {Object.entries(FILTERS_BUTTONS).map(
           ([key, { literal, href }], index) => {
             const isSelected = filterSelected === key
 
             return (
-              <li
-                key={key}
-                className={`min-w-[5%] text-center ${
-                  isSelected ? 'font-semibold' : 'font-light'
-                }`}
-              >
+              <li key={key} className='text-center font-light'>
                 <a
-                  ref={element => (tabRefs.current[index] = element)}
+                  className={`inline-block text-white text-opacity-60 ${
+                    isSelected ? 'opacity-100' : 'hover:text-neutral-300'
+                  } px-3 py-1 relative z-10 transition-all duration-500`}
+                  ref={element => {
+                    tabRefs.current[index] = element
+                  }}
                   href={href}
                   onClick={event => {
                     event.preventDefault()
