@@ -5,7 +5,9 @@ const Header = () => {
     <header className='relative z-20'>
       <nav className='bg-gray-800'>
         <div className='flex justify-between items-center p-4'>
-          <h1 className='text-white text-2xl'>AppEntry</h1>
+          <h1 className='text-white text-2xl'>
+            <a href=''>AppEntry</a>
+          </h1>
           <ul className='flex items-center'>
             <li className='text-white'>
               <a

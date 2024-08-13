@@ -11,10 +11,16 @@ import AddEntryForm from './AddEntryForm'
 interface Props {
   filterSelected: FilterValue
   diaries: DiaryEntry[]
+  onAddNewEntry: (diaries: DiaryEntry) => void
   onFilterChange: (filter: FilterValue) => void
 }
 
-const Content = ({ filterSelected, diaries, onFilterChange }: Props) => {
+const Content = ({
+  filterSelected,
+  diaries,
+  onAddNewEntry,
+  onFilterChange,
+}: Props) => {
   const [parentRef] = useAutoAnimate()
   const [isOpen, setIsOpen] = useState(false)
 
@@ -38,7 +44,10 @@ const Content = ({ filterSelected, diaries, onFilterChange }: Props) => {
         </button>
       </nav>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <AddEntryForm />
+        <AddEntryForm
+          onAddNewEntry={onAddNewEntry}
+          onClose={() => setIsOpen(false)}
+        />
       </Modal>
       <div className='pt-4'>
         <div className='absolute h-full w-full left-0 top-0'>

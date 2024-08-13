@@ -3,16 +3,19 @@ import { InputHTMLAttributes } from 'react'
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   name: string
   label: string
+  error?: string
 }
 
-const TextInput = ({ name, label, ...rest }: Props) => {
+const TextInput = ({ name, label, error, ...rest }: Props) => {
   return (
     <div className='relative'>
       <input
         id={name}
         name={name}
         type='text'
-        className='peer w-full h-10  placeholder-transparent border-b-2 border-gray-400 bg-transparent text-white focus:outline-none focus:border-blue-500 '
+        className={`peer w-full h-10 placeholder-transparent border-b-2 border-gray-400 bg-transparent text-white focus:outline-none focus:border-blue-500 ${
+          error ? 'border-red-500' : ''
+        }`}
         {...rest}
       />
       <label
@@ -21,6 +24,7 @@ const TextInput = ({ name, label, ...rest }: Props) => {
       >
         {label}
       </label>
+      {error && <p className='text-red-500 text-sm font-light mt-1'>{error}</p>}
     </div>
   )
 }
